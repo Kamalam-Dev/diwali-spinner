@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Diwali Team Spinner</title>
+<link rel="stylesheet" href="style.css">
 <style>
   body {
     background: linear-gradient(to bottom, #1a1a1a, #330000);
@@ -20,6 +21,7 @@
   #name {
     padding: 10px;
     width: 200px;
+    max-width: 90%;
     border-radius: 5px;
     border: 2px solid gold;
     margin: 10px auto;
@@ -43,8 +45,9 @@
   }
   #wheelContainer {
     position: relative;
-    width: 400px;
-    height: 400px;
+    width: 90%;
+    max-width: 400px;
+    aspect-ratio: 1/1;
     margin: 0 auto;
   }
   #wheel {
@@ -65,26 +68,35 @@
     left: 50%;
     transform-origin: 0% 0%;
     clip-path: polygon(0 0, 100% 0, 100% 100%);
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 10px;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 2px 2px 5px #000;
   }
   .segment span {
     display: block;
-    transform-origin: center;
-    font-size: 14px;
+    position: absolute;
+    width: 120%;
+    text-align: right;
+    right: 0;
+    top: 50%;
+    transform-origin: 100% 50%;
+    font-size: 2vw;
+    font-weight: bold;
+    color: #000;
+    text-shadow: 1px 1px 2px #fff;
+  }
+  .pop {
+    animation: pop 0.6s ease-out;
+  }
+  @keyframes pop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.5); }
+    100% { transform: scale(1); }
   }
   #pointerContainer {
     position: absolute;
-    top: -20px;
+    top: -10%;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
-    height: 60px;
+    width: 15%;
+    aspect-ratio: 1/1;
     z-index: 20;
     pointer-events: none;
   }
@@ -102,19 +114,19 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
-    height: 40px;
+    width: 15%;
+    aspect-ratio: 3/2;
   }
   #result {
     margin-top: 20px;
-    font-size: 1.3em;
+    font-size: 1.5em;
     color: gold;
     text-shadow: 1px 1px 5px red;
   }
   #allResults {
     list-style: none;
     padding: 0;
-    max-width: 400px;
+    max-width: 90%;
     margin: 20px auto;
     text-align: left;
     color: #ffd700;
@@ -147,172 +159,7 @@
 <ul id="allResults"></ul>
 <canvas id="confettiCanvas"></canvas>
 
-<script>
-const wheel = document.getElementById("wheel");
-const spinButton = document.getElementById("spinButton");
-const canvas = document.getElementById("confettiCanvas");
-const ctx = canvas.getContext("2d");
-const diyaCanvas = document.getElementById("diya");
-const dCtx = diyaCanvas.getContext("2d");
-const allResults = document.getElementById("allResults");
-
-// REPLACE with your Google Apps Script Web App URL
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxA85s4o288o0JrpTEMfS4ozbYI4b3K21pij2ARhqfx83fnINSXY5VQCkbdx2e9FYHo/exec";
-
-// Teams and colors
-const teams = ["Team A", "Team B", "Team C", "Team D", "Team E", "Team F", "Team G", "Team H"];
-const colors = ["#ff4d4d","#ffd11a","#ff9933","#ff66ff","#66ff66","#ff1a1a","#ffcc66","#ff66cc"];
-const numSegments = teams.length;
-
-// Set canvas sizes
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-diyaCanvas.width = 60;
-diyaCanvas.height = 40;
-
-// Draw flickering Diya
-function drawDiya() {
-  dCtx.clearRect(0,0,diyaCanvas.width,diyaCanvas.height);
-  // Base
-  dCtx.fillStyle="#ff9900";
-  dCtx.beginPath();
-  dCtx.moveTo(5,30);
-  dCtx.quadraticCurveTo(30,50,55,30);
-  dCtx.closePath();
-  dCtx.fill();
-  // Flame
-  const flameHeight = 15 + Math.random()*5;
-  const flameWidth = 6;
-  const flameX = 30;
-  const flameY = 10;
-  dCtx.fillStyle="yellow";
-  dCtx.beginPath();
-  dCtx.ellipse(flameX, flameY, flameWidth, flameHeight, 0, 0, 2*Math.PI);
-  dCtx.fill();
-}
-setInterval(drawDiya, 150);
-
-// Create wheel segments
-for (let i=0;i<numSegments;i++){
-  const seg = document.createElement("div");
-  seg.classList.add("segment");
-  seg.style.background = colors[i % colors.length];
-  const angle = (360/numSegments)*i;
-  seg.style.transform = `rotate(${angle}deg) skewY(${90-360/numSegments}deg)`;
-  
-  const label = document.createElement("span");
-  label.innerText = teams[i];
-  label.style.transform = `rotate(${360/numSegments/2 - 90}deg)`; 
-  seg.appendChild(label);
-  
-  wheel.appendChild(seg);
-}
-
-let spinning=false;
-let currentRotation=0;
-
-// Confetti
-const confettiParticles = [];
-function launchConfetti() {
-  const confColors = ["#ffcc33","#ff3300","#ff66ff","#ff9900","#ffcc66"];
-  for(let i=0;i<120;i++){
-    confettiParticles.push({
-      x: Math.random()*canvas.width,
-      y: Math.random()*canvas.height - canvas.height,
-      r: Math.random()*5+2,
-      d: Math.random()*10+5,
-      color: confColors[Math.floor(Math.random()*confColors.length)],
-      tilt: Math.random()*10-10,
-      tiltAngleIncrement: Math.random()*0.05+0.02,
-      type: Math.random()<0.3?'spark':'circle'
-    });
-  }
-  requestAnimationFrame(drawConfetti);
-}
-
-function drawConfetti(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  for(let i=0;i<confettiParticles.length;i++){
-    const p=confettiParticles[i];
-    ctx.beginPath();
-    ctx.fillStyle=p.color;
-    ctx.strokeStyle=p.color;
-    if(p.type==='circle'){
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fill();
-    } else {
-      ctx.lineWidth=p.r/2;
-      ctx.moveTo(p.x+p.tilt,p.y);
-      ctx.lineTo(p.x+p.tilt+p.r*2,p.y+p.r*2);
-      ctx.stroke();
-    }
-    p.y+=(Math.cos(p.d)+2+p.r/2)/2;
-    p.tilt+=p.tiltAngleIncrement;
-    if(p.y>canvas.height){
-      confettiParticles.splice(i,1);
-      i--;
-    }
-  }
-  if(confettiParticles.length>0) requestAnimationFrame(drawConfetti);
-}
-
-// Google Sheet logging
-function logToSheet(name, team){
-  fetch(GOOGLE_SHEET_URL,{
-    method:"POST",
-    body: JSON.stringify({name:name,team:team}),
-    headers:{'Content-Type':'application/json'}
-  })
-  .then(res=>res.json())
-  .then(data=>console.log("Logged:",data))
-  .catch(err=>console.error(err));
-}
-
-// Spin button
-spinButton.addEventListener("click",()=>{
-  const name=document.getElementById("name").value.trim();
-  if(!name){alert("Please enter your name!"); return;}
-  if(spinning) return;
-
-  spinning=true;
-  document.getElementById("result").innerText="Spinning... 🎆";
-
-  const extraRotation=Math.floor(Math.random()*360);
-  currentRotation+=360*6+extraRotation;
-
-  wheel.style.transition="transform 3s cubic-bezier(0.25,1,0.5,1)";
-  wheel.style.transform=`rotate(${currentRotation}deg)`;
-
-  wheel.addEventListener("transitionend",function handler(){
-    wheel.style.transition="none";
-    currentRotation=currentRotation%360;
-    wheel.style.transform=`rotate(${currentRotation}deg)`;
-    wheel.removeEventListener("transitionend",handler);
-
-    const degreesPerSegment=360/numSegments;
-    const selectedIndex=Math.floor(((360-currentRotation+degreesPerSegment/2)%360)/degreesPerSegment);
-    const teamName=teams[selectedIndex];
-
-    document.getElementById("result").innerHTML=`🎉 ${name}, you’ve been assigned to <b>${teamName}</b>!`;
-
-    const li=document.createElement("li");
-    li.innerHTML=`${name} → <b>${teamName}</b>`;
-    allResults.appendChild(li);
-
-    logToSheet(name,teamName);
-    document.getElementById("name").value="";
-    document.getElementById("name").focus();
-
-    spinning=false;
-    launchConfetti();
-  });
-});
-
-window.addEventListener('resize',()=>{
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-});
-</script>
+<!-- Link to external JS -->
+<script src="spinner.js"></script>
 </body>
 </html>
-
