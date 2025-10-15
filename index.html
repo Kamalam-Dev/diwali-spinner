@@ -1,344 +1,318 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <style>
-    body {
-      background: #1a1a1a;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      text-align: center;
-    }
-
-    #wheelContainer {
-      position: relative;
-      width: 400px;
-      height: 400px;
-      margin: 40px auto;
-    }
-
-    #wheel {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      position: relative;
-      overflow: hidden;
-      border: 5px solid #fff;
-      transform: rotate(0deg);
-      transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
-      box-shadow: 0 0 20px gold;
-    }
-
-    .segment {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      top: 50%;
-      left: 50%;
-      transform-origin: 0% 0%;
-      clip-path: polygon(0 0, 100% 0, 100% 100%);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 10px;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 2px 2px 5px #000;
-    }
-
-    .segment span {
-      display: block;
-      transform: rotate(0deg);
-      transform-origin: center;
-    }
-
-    #pointerContainer {
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 60px;
-      z-index: 20;
-      pointer-events: none;
-    }
-
-    #pointer {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 30px solid gold;
-      filter: drop-shadow(0 0 10px gold);
-    }
-
-    #diya {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 40px;
-    }
-
-    #name {
-      display: block;
-      margin: 20px auto 10px auto;
-      padding: 5px;
-      width: 200px;
-      border-radius: 5px;
-      border: 2px solid gold;
-      text-align: center;
-    }
-
-    #spinButton {
-      display: block;
-      margin: 10px auto 20px auto;
-      padding: 10px 20px;
-      font-size: 1em;
-      background: gold;
-      color: #1a1a1a;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 10px gold;
-    }
-
-    #spinButton:hover {
-      background: orange;
-      box-shadow: 0 0 20px orange;
-    }
-
-    #result {
-      text-align: center;
-      font-size: 1.3em;
-      margin-top: 20px;
-      color: gold;
-      text-shadow: 1px 1px 5px red;
-    }
-
-    #allResults {
-      list-style: none;
-      padding: 0;
-      margin: 10px auto;
-      max-width: 400px;
-      text-align: left;
-      color: #ffd700;
-    }
-
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 9999;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Diwali Team Spinner</title>
+<style>
+  body {
+    background: linear-gradient(to bottom, #1a1a1a, #330000);
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    margin-top: 20px;
+    color: gold;
+    text-shadow: 1px 1px 5px red;
+  }
+  #name {
+    padding: 10px;
+    width: 200px;
+    border-radius: 5px;
+    border: 2px solid gold;
+    margin: 10px auto;
+    display: block;
+    text-align: center;
+  }
+  #spinButton {
+    padding: 10px 20px;
+    background: gold;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 10px gold;
+    margin-bottom: 20px;
+  }
+  #spinButton:hover {
+    background: orange;
+    box-shadow: 0 0 20px orange;
+  }
+  #wheelContainer {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+  }
+  #wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 0 20px gold;
+    overflow: hidden;
+    position: relative;
+    transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0% 0%;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 10px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 5px #000;
+  }
+  .segment span {
+    display: block;
+    transform-origin: center;
+    font-size: 14px;
+  }
+  #pointerContainer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    z-index: 20;
+    pointer-events: none;
+  }
+  #pointer {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 30px solid gold;
+    margin: 0 auto;
+    filter: drop-shadow(0 0 10px gold);
+  }
+  #diya {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 40px;
+  }
+  #result {
+    margin-top: 20px;
+    font-size: 1.3em;
+    color: gold;
+    text-shadow: 1px 1px 5px red;
+  }
+  #allResults {
+    list-style: none;
+    padding: 0;
+    max-width: 400px;
+    margin: 20px auto;
+    text-align: left;
+    color: #ffd700;
+  }
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+</style>
 </head>
 <body>
-  <h2>🎆 Diwali Team Spinner 🎆</h2>
-  <input id="name" placeholder="Enter your name">
-  <button id="spinButton">Spin the Diwali Wheel!</button>
 
-  <div id="wheelContainer">
-    <div id="pointerContainer">
-      <canvas id="diya"></canvas>
-      <div id="pointer"></div>
-    </div>
-    <div id="wheel"></div>
+<h1>🎆 Diwali Team Spinner 🎆</h1>
+<input id="name" placeholder="Enter your name">
+<button id="spinButton">Spin the Wheel!</button>
+
+<div id="wheelContainer">
+  <div id="pointerContainer">
+    <canvas id="diya"></canvas>
+    <div id="pointer"></div>
   </div>
+  <div id="wheel"></div>
+</div>
 
-  <div id="result"></div>
-  <h3>All Spins:</h3>
-  <ul id="allResults"></ul>
+<div id="result"></div>
+<h3>All Spins:</h3>
+<ul id="allResults"></ul>
+<canvas id="confettiCanvas"></canvas>
 
-  <canvas id="confettiCanvas"></canvas>
+<script>
+const wheel = document.getElementById("wheel");
+const spinButton = document.getElementById("spinButton");
+const canvas = document.getElementById("confettiCanvas");
+const ctx = canvas.getContext("2d");
+const diyaCanvas = document.getElementById("diya");
+const dCtx = diyaCanvas.getContext("2d");
+const allResults = document.getElementById("allResults");
 
-  <script>
-    const wheel = document.getElementById("wheel");
-    const spinButton = document.getElementById("spinButton");
-    const canvas = document.getElementById("confettiCanvas");
-    const ctx = canvas.getContext("2d");
+// REPLACE with your Google Apps Script Web App URL
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxA85s4o288o0JrpTEMfS4ozbYI4b3K21pij2ARhqfx83fnINSXY5VQCkbdx2e9FYHo/exec";
 
-    const diyaCanvas = document.getElementById("diya");
-    const dCtx = diyaCanvas.getContext("2d");
+// Teams and colors
+const teams = ["Team A", "Team B", "Team C", "Team D", "Team E", "Team F", "Team G", "Team H"];
+const colors = ["#ff4d4d","#ffd11a","#ff9933","#ff66ff","#66ff66","#ff1a1a","#ffcc66","#ff66cc"];
+const numSegments = teams.length;
 
-    const allResults = document.getElementById("allResults");
+// Set canvas sizes
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+diyaCanvas.width = 60;
+diyaCanvas.height = 40;
 
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxLU4knuUJPB3alfZOZadgMY0pp4_mYVkD0Mtnzgs4VMzrz97Mac5Sv5i0iOaGIKgz5/exec"; // <--- replace this with your Apps Script URL
+// Draw flickering Diya
+function drawDiya() {
+  dCtx.clearRect(0,0,diyaCanvas.width,diyaCanvas.height);
+  // Base
+  dCtx.fillStyle="#ff9900";
+  dCtx.beginPath();
+  dCtx.moveTo(5,30);
+  dCtx.quadraticCurveTo(30,50,55,30);
+  dCtx.closePath();
+  dCtx.fill();
+  // Flame
+  const flameHeight = 15 + Math.random()*5;
+  const flameWidth = 6;
+  const flameX = 30;
+  const flameY = 10;
+  dCtx.fillStyle="yellow";
+  dCtx.beginPath();
+  dCtx.ellipse(flameX, flameY, flameWidth, flameHeight, 0, 0, 2*Math.PI);
+  dCtx.fill();
+}
+setInterval(drawDiya, 150);
 
-    const colors = ["#ff4d4d","#ffd11a","#ff9933","#ff66ff","#66ff66","#ff1a1a","#ffcc66","#ff66cc"];
-    const teams = ["Team A", "Team B", "Team C", "Team D", "Team E", "Team F", "Team G", "Team H"];
-    const numSegments = teams.length;
+// Create wheel segments
+for (let i=0;i<numSegments;i++){
+  const seg = document.createElement("div");
+  seg.classList.add("segment");
+  seg.style.background = colors[i % colors.length];
+  const angle = (360/numSegments)*i;
+  seg.style.transform = `rotate(${angle}deg) skewY(${90-360/numSegments}deg)`;
+  
+  const label = document.createElement("span");
+  label.innerText = teams[i];
+  label.style.transform = `rotate(${360/numSegments/2 - 90}deg)`; 
+  seg.appendChild(label);
+  
+  wheel.appendChild(seg);
+}
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+let spinning=false;
+let currentRotation=0;
 
-    diyaCanvas.width = 60;
-    diyaCanvas.height = 40;
-
-    // --- Diya animation ---
-    function drawDiya() {
-      dCtx.clearRect(0, 0, diyaCanvas.width, diyaCanvas.height);
-      dCtx.fillStyle = "#ff9900";
-      dCtx.beginPath();
-      dCtx.moveTo(5,30);
-      dCtx.quadraticCurveTo(30,50,55,30);
-      dCtx.closePath();
-      dCtx.fill();
-
-      const flameHeight = 15 + Math.random()*5;
-      const flameWidth = 6;
-      const flameX = 30;
-      const flameY = 10;
-      dCtx.fillStyle = "yellow";
-      dCtx.beginPath();
-      dCtx.ellipse(flameX, flameY, flameWidth, flameHeight, 0, 0, 2*Math.PI);
-      dCtx.fill();
-    }
-    setInterval(drawDiya, 150);
-
-    // --- Create wheel segments ---
-    for (let i = 0; i < numSegments; i++) {
-      const seg = document.createElement("div");
-      seg.classList.add("segment");
-      seg.style.background = colors[i % colors.length];
-      const angle = (360 / numSegments) * i;
-      seg.style.transform = `rotate(${angle}deg) skewY(${90 - 360 / numSegments}deg)`;
-
-      const label = document.createElement("span");
-      label.innerText = teams[i];
-      label.style.transform = `rotate(${360 / numSegments / 2 - 90}deg)`; 
-      seg.appendChild(label);
-
-      wheel.appendChild(seg);
-    }
-
-    let spinning = false;
-    let currentRotation = 0;
-
-    function logToGoogleSheet(name, team) {
-      fetch(GOOGLE_SHEET_URL, {
-        method: "POST",
-        body: JSON.stringify({name: name, team: team}),
-        headers: {'Content-Type': 'application/json'}
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.status === "success"){
-          console.log(`Logged ${name} → ${team}`);
-        } else {
-          console.error("Error logging:", data.message);
-        }
-      })
-      .catch(err => console.error("Fetch error:", err));
-    }
-
-    spinButton.addEventListener("click", () => {
-      const name = document.getElementById("name").value.trim();
-      if (!name) { alert("Please enter your name!"); return; }
-      if (spinning) return;
-
-      spinning = true;
-      document.getElementById("result").innerText = "Spinning... 🎆";
-
-      const extraRotation = Math.floor(Math.random() * 360);
-      currentRotation += 360 * 6 + extraRotation;
-
-      wheel.style.transition = "transform 3s cubic-bezier(0.25, 1, 0.5, 1)";
-      wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-      wheel.addEventListener("transitionend", function handler() {
-        wheel.style.transition = "none";
-        currentRotation = currentRotation % 360;
-        wheel.style.transform = `rotate(${currentRotation}deg)`;
-        wheel.removeEventListener("transitionend", handler);
-
-        const degreesPerSegment = 360 / numSegments;
-        const selectedIndex = Math.floor(((360 - currentRotation + degreesPerSegment/2) % 360) / degreesPerSegment);
-        const teamName = teams[selectedIndex];
-
-        // Display result for this participant
-        document.getElementById("result").innerHTML = `🎉 ${name}, you’ve been assigned to <b>${teamName}</b>!`;
-
-        // Add to live board
-        const li = document.createElement("li");
-        li.innerHTML = `${name} → <b>${teamName}</b>`;
-        allResults.appendChild(li);
-
-        // Log to Google Sheet
-        logToGoogleSheet(name, teamName);
-
-        // Reset input for next participant
-        document.getElementById("name").value = "";
-        document.getElementById("name").focus();
-
-        spinning = false;
-        launchDiwaliConfetti();
-      });
+// Confetti
+const confettiParticles = [];
+function launchConfetti() {
+  const confColors = ["#ffcc33","#ff3300","#ff66ff","#ff9900","#ffcc66"];
+  for(let i=0;i<120;i++){
+    confettiParticles.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height - canvas.height,
+      r: Math.random()*5+2,
+      d: Math.random()*10+5,
+      color: confColors[Math.floor(Math.random()*confColors.length)],
+      tilt: Math.random()*10-10,
+      tiltAngleIncrement: Math.random()*0.05+0.02,
+      type: Math.random()<0.3?'spark':'circle'
     });
+  }
+  requestAnimationFrame(drawConfetti);
+}
 
-    // --- Diwali Confetti ---
-    const confettiParticles = [];
-    function launchDiwaliConfetti() {
-      const colors = ["#ffcc33","#ff3300","#ff66ff","#ff9900","#ffcc66"];
-      const numParticles = 120;
-      for (let i = 0; i < numParticles; i++) {
-        confettiParticles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height - canvas.height,
-          r: Math.random() * 5 + 2,
-          d: Math.random() * 10 + 5,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          tilt: Math.random() * 10 - 10,
-          tiltAngleIncrement: Math.random() * 0.05 + 0.02,
-          type: Math.random() < 0.3 ? 'spark' : 'circle'
-        });
-      }
-      requestAnimationFrame(drawConfetti);
+function drawConfetti(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<confettiParticles.length;i++){
+    const p=confettiParticles[i];
+    ctx.beginPath();
+    ctx.fillStyle=p.color;
+    ctx.strokeStyle=p.color;
+    if(p.type==='circle'){
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+    } else {
+      ctx.lineWidth=p.r/2;
+      ctx.moveTo(p.x+p.tilt,p.y);
+      ctx.lineTo(p.x+p.tilt+p.r*2,p.y+p.r*2);
+      ctx.stroke();
     }
-
-    function drawConfetti() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < confettiParticles.length; i++) {
-        const p = confettiParticles[i];
-        ctx.beginPath();
-        ctx.strokeStyle = p.color;
-        ctx.fillStyle = p.color;
-        if (p.type === 'circle') {
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          ctx.lineWidth = p.r / 2;
-          ctx.moveTo(p.x + p.tilt, p.y);
-          ctx.lineTo(p.x + p.tilt + p.r * 2, p.y + p.r * 2);
-          ctx.stroke();
-        }
-
-        p.y += (Math.cos(p.d) + 2 + p.r / 2) / 2;
-        p.tilt += p.tiltAngleIncrement;
-
-        if (p.y > canvas.height) {
-          confettiParticles.splice(i, 1);
-          i--;
-        }
-      }
-      if (confettiParticles.length > 0) {
-        requestAnimationFrame(drawConfetti);
-      }
+    p.y+=(Math.cos(p.d)+2+p.r/2)/2;
+    p.tilt+=p.tiltAngleIncrement;
+    if(p.y>canvas.height){
+      confettiParticles.splice(i,1);
+      i--;
     }
+  }
+  if(confettiParticles.length>0) requestAnimationFrame(drawConfetti);
+}
 
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  </script>
+// Google Sheet logging
+function logToSheet(name, team){
+  fetch(GOOGLE_SHEET_URL,{
+    method:"POST",
+    body: JSON.stringify({name:name,team:team}),
+    headers:{'Content-Type':'application/json'}
+  })
+  .then(res=>res.json())
+  .then(data=>console.log("Logged:",data))
+  .catch(err=>console.error(err));
+}
+
+// Spin button
+spinButton.addEventListener("click",()=>{
+  const name=document.getElementById("name").value.trim();
+  if(!name){alert("Please enter your name!"); return;}
+  if(spinning) return;
+
+  spinning=true;
+  document.getElementById("result").innerText="Spinning... 🎆";
+
+  const extraRotation=Math.floor(Math.random()*360);
+  currentRotation+=360*6+extraRotation;
+
+  wheel.style.transition="transform 3s cubic-bezier(0.25,1,0.5,1)";
+  wheel.style.transform=`rotate(${currentRotation}deg)`;
+
+  wheel.addEventListener("transitionend",function handler(){
+    wheel.style.transition="none";
+    currentRotation=currentRotation%360;
+    wheel.style.transform=`rotate(${currentRotation}deg)`;
+    wheel.removeEventListener("transitionend",handler);
+
+    const degreesPerSegment=360/numSegments;
+    const selectedIndex=Math.floor(((360-currentRotation+degreesPerSegment/2)%360)/degreesPerSegment);
+    const teamName=teams[selectedIndex];
+
+    document.getElementById("result").innerHTML=`🎉 ${name}, you’ve been assigned to <b>${teamName}</b>!`;
+
+    const li=document.createElement("li");
+    li.innerHTML=`${name} → <b>${teamName}</b>`;
+    allResults.appendChild(li);
+
+    logToSheet(name,teamName);
+    document.getElementById("name").value="";
+    document.getElementById("name").focus();
+
+    spinning=false;
+    launchConfetti();
+  });
+});
+
+window.addEventListener('resize',()=>{
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+});
+</script>
 </body>
 </html>
+
