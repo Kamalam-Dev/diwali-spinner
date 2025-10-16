@@ -39,8 +39,8 @@ function drawDiya(){
 }
 setInterval(drawDiya,150);
 
-// --- CREATE WHEEL SEGMENTS WITH AUTO-SHRINK FONT ---
-for(let i=0;i<numSegments;i++){
+// --- CREATE WHEEL SEGMENTS WITH DYNAMIC FONT SIZING ---
+for (let i = 0; i < numSegments; i++) {
     const seg = document.createElement("div");
     seg.classList.add("segment");
     seg.style.background = colors[i % colors.length];
@@ -52,18 +52,15 @@ for(let i=0;i<numSegments;i++){
     seg.appendChild(label);
     wheel.appendChild(seg);
 
-    // --- AUTO-SHRINK FONT LOGIC ---
-    let fontSize = 16; // starting px
+    // --- DYNAMIC FONT SIZING ---
+    const wheelRadius = wheel.offsetWidth / 2;
+    const sliceAngle = 360 / numSegments;
+    const arcLength = 2 * Math.PI * wheelRadius * (sliceAngle / 360) * 0.9; // 90% of arc
+    let fontSize = Math.min(28, arcLength / label.innerText.length); // max 28px
+    fontSize = Math.max(fontSize, 12); // min 12px
     label.style.fontSize = fontSize + "px";
-    const maxWidth = wheel.offsetWidth / 2 * 0.9; // half wheel radius * 0.9
-    let width = label.offsetWidth;
-    while(width > maxWidth && fontSize > 8){
-        fontSize -= 1;
-        label.style.fontSize = fontSize + "px";
-        width = label.offsetWidth;
-    }
-    // rotate text slightly to center along slice
-    label.style.transform = `rotate(${360/numSegments/2}deg) translateY(-50%)`;
+
+    label.style.transform = `rotate(${sliceAngle / 2}deg) translateY(-50%)`;
 }
 
 let spinning = false;
