@@ -40,7 +40,7 @@ function drawDiya() {
 }
 setInterval(drawDiya,150);
 
-// --- CREATE WHEEL SEGMENTS WITH LARGE TEXT ---
+// --- CREATE WHEEL SEGMENTS WITH LARGE READABLE TEXT ---
 for (let i = 0; i < numSegments; i++) {
     const seg = document.createElement("div");
     seg.classList.add("segment");
@@ -50,22 +50,21 @@ for (let i = 0; i < numSegments; i++) {
 
     const label = document.createElement("span");
     label.innerText = teams[i];
+
+    // Large readable text inside slice
     label.style.position = "absolute";
-    label.style.left = "50%";
-    label.style.top = "50%";
-    label.style.display = "block";
+    label.style.left = "0";
+    label.style.top = "0";
+    label.style.width = "200%";      
+    label.style.height = "200%";
+    label.style.display = "flex";
+    label.style.alignItems = "center";
+    label.style.justifyContent = "flex-end";
     label.style.textAlign = "right";
-
-    // --- FONT SIZE BASED ON WHEEL RADIUS ONLY ---
-    const wheelRadius = wheel.offsetWidth / 2;
-    let fontSize = wheelRadius / 5;  // larger fraction = bigger text
-    fontSize = Math.min(fontSize, 50); // max font
-    fontSize = Math.max(fontSize, 16); // min font
-    label.style.fontSize = fontSize + "px";
-
-    // Rotate text to center in slice
-    const sliceAngle = 360 / numSegments;
-    label.style.transform = `rotate(${sliceAngle/2}deg) translateY(-50%)`;
+    label.style.fontSize = "22px";      // increase if needed
+    label.style.fontWeight = "bold";
+    label.style.color = "#000";
+    label.style.textShadow = "1px 1px 2px #fff";
 
     seg.appendChild(label);
     wheel.appendChild(seg);
