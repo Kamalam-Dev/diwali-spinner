@@ -8,7 +8,7 @@ const allResults=document.getElementById("allResults");
 
 const GOOGLE_SHEET_URL="https://script.google.com/macros/s/AKfycbzcaOaLMYx0oS54UzCCur0fuLPkIyARW0m0DKa08agUtJxf5hh5TmC2i8BDdZQnuKs/exec"; // <-- replace this
 
-const teams=["Team A","Team B","Team C","Team D","Team E","Team F","Team G","Team H"];
+const teams=["Team-Lakshmi Vedi ","Team-Bijili","Team-Kuruvi Vedi","Team-Atom Bomb"];
 const colors=["#ff4d4d","#ffd11a","#ff9933","#ff66ff","#66ff66","#ff1a1a","#ffcc66","#ff66cc"];
 const numSegments=teams.length;
 
