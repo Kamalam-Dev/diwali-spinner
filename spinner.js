@@ -79,10 +79,17 @@ function drawConfetti(){
     if(confettiParticles.length>0) requestAnimationFrame(drawConfetti);
 }
 
-function logToSheet(name,team){
-    fetch(GOOGLE_SHEET_URL,{method:"POST",body:JSON.stringify({name,team}),headers:{'Content-Type':'application/json'}})
-    .then(res=>res.json()).then(data=>console.log("Logged:",data)).catch(err=>console.error("Sheet error:",err));
+function logToSheet(name, team) {
+  fetch(GOOGLE_SHEET_URL, {
+    method: "POST",
+    mode: "no-cors", // 👈 this line allows browser to send data even if response is blocked
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, team })
+  })
+  .then(() => console.log(`Logged spin for ${name} → ${team}`))
+  .catch(err => console.error("Sheet logging error:", err));
 }
+
 
 spinButton.addEventListener("click",()=>{
     const name=document.getElementById("name").value.trim();
